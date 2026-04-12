@@ -1,0 +1,12 @@
+requests
+urllib3
+beautifulsoup4
+pdfplumber
+pdf2image
+pytesseract
+arabic_reshaper
+python-bidi
+ollama
+pydantic
+rapidfuzz
+python-dotenv

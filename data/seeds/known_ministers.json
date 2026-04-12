@@ -1,0 +1,40 @@
+{
+  "ministers": [
+    {
+      "name_fr": "Ahmed Ben Salah",
+      "name_ar": "أحمد بن صالح",
+      "known_roles": ["Minister of Planning and Finance"],
+      "era": "Bourguiba"
+    },
+    {
+      "name_fr": "Hédi Nouira",
+      "name_ar": "الهادي نويرة",
+      "known_roles": ["Prime Minister"],
+      "era": "Bourguiba"
+    },
+    {
+      "name_fr": "Mohamed Ghannouchi",
+      "name_ar": "محمد الغنوشي",
+      "known_roles": ["Prime Minister"],
+      "era": "Ben Ali"
+    },
+    {
+      "name_fr": "Habib Essid",
+      "name_ar": "الحبيب الصيد",
+      "known_roles": ["Prime Minister"],
+      "era": "Transition / Beji"
+    },
+    {
+      "name_fr": "Youssef Chahed",
+      "name_ar": "يوسف الشاهد",
+      "known_roles": ["Prime Minister"],
+      "era": "Beji"
+    },
+    {
+      "name_fr": "Najla Bouden",
+      "name_ar": "نجلاء بودن",
+      "known_roles": ["Head of Government"],
+      "era": "Saied"
+    }
+  ]
+}

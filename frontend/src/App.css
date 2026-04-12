@@ -1,0 +1,133 @@
+:root {
+  --primary-bg: #f8fafc;
+  --header-bg: #ffffff;
+  --accent: #2563eb;
+  --text-main: #0f172a;
+  --text-dim: #64748b;
+  --border: #e2e8f0;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--primary-bg);
+  color: var(--text-main);
+  overflow: hidden;
+}
+
+.app-container {
+  display: grid;
+  grid-template-areas: 
+    "header header header"
+    "main main drawer";
+  grid-template-columns: 1fr 1fr 350px;
+  grid-template-rows: 60px 1fr;
+  height: 100vh;
+}
+
+.app-header {
+  grid-area: header;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  z-index: 100;
+}
+
+.app-header h1 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin: 0;
+}
+
+.search-bar input {
+  width: 400px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  background: #f1f5f9;
+}
+
+.app-main {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+.timeline-section {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.view-section {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.view-controls {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.view-controls h2 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.current-date-display {
+  font-weight: 600;
+  background: #eff6ff;
+  color: #1e40af;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+.chart-container {
+  flex: 1;
+  position: relative;
+  overflow: auto;
+}
+
+.profile-drawer {
+  grid-area: drawer;
+  background: #fff;
+  border-left: 1px solid var(--border);
+  padding: 2rem;
+  box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.drawer-placeholder {
+  text-align: center;
+  color: var(--text-dim);
+  margin-top: 50%;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-weight: 500;
+  color: var(--text-dim);
+}
