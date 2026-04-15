@@ -1,62 +1,85 @@
-version: '3.8'
-
 services:
+
+  # ── Database ────────────────────────────────────────────────────────────────
   db:
     build:
       context: ./backend/db
       dockerfile: Dockerfile.db
-    environment:
-      POSTGRES_DB: marsad
-      POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
     volumes:
       - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data
-
-  api:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.api
     environment:
-      DATABASE_URL: postgresql://postgres:password@db:5432/marsad
-      OLLAMA_HOST: http://ollama:11434
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-    volumes:
-      - ./backend:/app
+      POSTGRES_DB: marsad
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d marsad"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-  pipeline:
-    build:
-      context: ./pipeline
-      dockerfile: Dockerfile
-    environment:
-      OLLAMA_HOST: http://ollama:11434
-    depends_on:
-       - db
-    volumes:
-      - ./data:/data
-      - ./pipeline:/app
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    depends_on:
-      - api
-    volumes:
-      - ./frontend:/app
-
+  # ── LLM (NER inference) ─────────────────────────────────────────────────────
   ollama:
     image: ollama/ollama:latest
     ports:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
+
+  # ── Backend API ─────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app          # hot-reload in dev
+    environment:
+      POSTGRES_DB: marsad
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ── Frontend ─────────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src       # hot-reload in dev
+      - ./frontend/public:/app/public
+    depends_on:
+      - api
+
+  # ── ETL Pipeline (run on-demand, not started by default) ────────────────────
+  pipeline:
+    build:
+      context: ./pipeline
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/app/data        # persist scraped + extracted data
+      - ./pipeline:/app         # mount scripts for easy iteration
+    environment:
+      POSTGRES_DB: marsad
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      OLLAMA_HOST: http://ollama:11434
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles:
+      - pipeline                # only starts with: docker compose --profile pipeline up
 
 volumes:
   postgres_data:
